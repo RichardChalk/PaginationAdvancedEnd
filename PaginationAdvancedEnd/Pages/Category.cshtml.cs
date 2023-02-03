@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SearchPaginationEnd.Services;
 
+
 namespace SearchPaginationEnd.Pages
 {
     public class CategoryModel : PageModel
@@ -46,15 +47,17 @@ namespace SearchPaginationEnd.Pages
             CategoryName = _categoryService.ReadCategories()
                 .First(c => c.CategoryId == categoryId).CategoryName;
 
-            Products = _productService.ReadProducts(categoryId, sortColumn, 
-                sortOrder, pageNo, q)
-                .Select(p => new ProductViewModel
-                {
-                    Id = p.ProductId,
-                    Name = p.ProductName,
-                    UnitPrice = p.UnitPrice.Value,
-                    UnitInStock = p.UnitsInStock.Value,
-                }).ToList();
+            var result = _productService.ReadProducts(categoryId, sortColumn,
+            sortOrder, pageNo, q);
+
+            Products = result.Results
+            .Select(p => new ProductViewModel
+            {
+                Id = p.ProductId,
+                Name = p.ProductName,
+                UnitPrice = p.UnitPrice.Value,
+                UnitInStock = p.UnitsInStock.Value,
+            }).ToList();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using SearchPaginationEnd.Models;
+﻿using PaginationAdvancedEnd.Infrastructure.Paging;
+using SearchPaginationEnd.Models;
 using System.Security.Cryptography.X509Certificates;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
@@ -12,7 +13,7 @@ namespace SearchPaginationEnd.Services
             _dbContext = dbContext;
         }
 
-        public IEnumerable<Product> ReadProducts(
+        public PagedResult<Product> ReadProducts(
             int categoryId, string sortColumn, string sortOrder, int page, string q)
         {
             var query = _dbContext.Products
@@ -52,12 +53,14 @@ namespace SearchPaginationEnd.Services
                     query = query.OrderBy(p => p.UnitsInStock);
             }
 
-            var firstItemIndex = (page - 1) * 5; // 5 är page storlek
+            //var firstItemIndex = (page - 1) * 5; // 5 är page storlek
 
-            query = query.Skip(firstItemIndex);
-            query = query.Take(5); // 5 är page storlek
+            //query = query.Skip(firstItemIndex);
+            //query = query.Take(5); // 5 är page storlek
 
-            return query.ToList();
+            return query.GetPaged(page, 5);
+
+            // return query.ToList();
         }
     }
 }
