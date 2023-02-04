@@ -29,6 +29,7 @@ namespace SearchPaginationEnd.Pages
         public string SortColumn { get; set; }
         public string SortOrder { get; set; }
         public string Q { get; set; }
+        public int PageCount { get; set; }
 
         public void OnGet(int categoryId, string sortColumn, 
             string sortOrder, int pageNo, string q)
@@ -49,6 +50,8 @@ namespace SearchPaginationEnd.Pages
 
             var result = _productService.ReadProducts(categoryId, sortColumn,
             sortOrder, pageNo, q);
+
+            PageCount = result.PageCount;
 
             Products = result.Results
             .Select(p => new ProductViewModel
